@@ -9,12 +9,11 @@ struct Process {
   int art = 0;  // Arrival Time
 };
 
-void processesStruc(int np){
+void processesStruc(Process procArr[], int np){
   //cout << "\n ";
     cout << "La estructura de cada proceso es la siguiente: \n";
     cout << "ID del proceso(No lo asigna el usuario), Tiempo de ejecución, Tiempo de llegada: \n";
-
-    Process procArr[np];
+;
     int burstT;
     int arrivalT;
     for (int i = 1; i <= np; i++){
@@ -23,9 +22,9 @@ void processesStruc(int np){
       cin >> burstT;
       cout << "Arrival Time: ";
       cin >> arrivalT;
-      //procArr[i-1].pid = i;
-      //procArr[i-1].bt =  burstT;
-      //procArr[i-1].art = arrivalT;
+      procArr[i-1].pid = i;
+      procArr[i-1].bt =  burstT;
+      procArr[i-1].art = arrivalT;
       //cout << procArr[i-1].pid << "\n";
       //cout << procArr[i-1].bt << "\n";
       //cout << procArr[i-1].art << "\n";
@@ -39,7 +38,13 @@ void sJF(){
     cout << "Por favor ingrese el número de Procesos (Este debe de estar en un rango del 1-10): ";
   cin >> nProcesses;
   }
-  processesStruc(nProcesses);
+  Process procArr[nProcesses];
+  processesStruc(procArr, nProcesses);
+  for (int i = 1; i <= nProcesses; i++){
+      cout << procArr[i-1].pid << "\n";
+      cout << procArr[i-1].bt << "\n";
+      cout << procArr[i-1].art << "\n";
+    }
 }
 
 void menuProcesos(){
