@@ -7,13 +7,31 @@ struct Process {
   int pid;      // Process ID
   int bt;       // Burst Time
   int art = 0;  // Arrival Time
+  int wt;
+  int tat;
 };
 
+void printAll(Process procArr[], int nProcesses){
+  cout << "Processes " << "   Burst time " << "   Arrival time" << "   Waiting time " << "   Turn around time\n";
+  for (int i = 1; i <= nProcesses; i++){
+    cout << procArr[i-1].pid << "\t\t" << procArr[i-1].bt << "\t\t" << procArr[i-1].art << "\t\t" << procArr[i-1].wt << "\t\t" << procArr[i-1].tat << "\n";
+  }
+}
+
+int getNumberOfProcesses(){
+  int nProcesses = -1;
+  while (nProcesses < 0 || nProcesses > 10){
+    cout << "Por favor ingrese el número de Procesos (Este debe de estar en un rango del 1-10): ";
+  cin >> nProcesses;
+  }
+  return nProcesses;
+}
+
 void processesStruc(Process procArr[], int np){
-  //cout << "\n ";
+
     cout << "La estructura de cada proceso es la siguiente: \n";
     cout << "ID del proceso(No lo asigna el usuario), Tiempo de ejecución, Tiempo de llegada: \n";
-;
+    
     int burstT;
     int arrivalT;
     for (int i = 1; i <= np; i++){
@@ -25,26 +43,72 @@ void processesStruc(Process procArr[], int np){
       procArr[i-1].pid = i;
       procArr[i-1].bt =  burstT;
       procArr[i-1].art = arrivalT;
-      //cout << procArr[i-1].pid << "\n";
-      //cout << procArr[i-1].bt << "\n";
-      //cout << procArr[i-1].art << "\n";
     }
-    //cout << sizeof(procArr) << " and " << sizeof(procArr[0]) << "\n";
 }
 
-void sJF(){
-  int nProcesses = -1;
-  while (nProcesses < 0 || nProcesses > 10){
-    cout << "Por favor ingrese el número de Procesos (Este debe de estar en un rango del 1-10): ";
-  cin >> nProcesses;
+/*void waitingTimeSFJ(Process procArr[], int np, int wt[]){
+  int runningT = 0;
+  int completeP = 0;
+  for (int time = 0; completeP != np; time++){
+    
   }
+  
+}*/
+
+void sJF(){
+  
+  int nProcesses = getNumberOfProcesses();
+  
   Process procArr[nProcesses];
   processesStruc(procArr, nProcesses);
+
+  int wt[nProcesses], tat[nProcesses], total_wt = 0, total_tat = 0;
+
+  //waitingTimeSJF(procArr, nProcesses, wt);
+  
   for (int i = 1; i <= nProcesses; i++){
       cout << procArr[i-1].pid << "\n";
       cout << procArr[i-1].bt << "\n";
       cout << procArr[i-1].art << "\n";
     }
+}
+
+void firstCFS(){
+
+  int nProcesses = getNumberOfProcesses();
+  Process procArr[nProcesses];
+  processesStruc(procArr, nProcesses);
+
+  cout << "FCFS running.... \n";
+
+  int wt[nProcesses], tat[nProcesses], total_wt = 0, total_tat = 0;
+  
+  Process aux;
+  for (int i=0; i < nProcesses; i++){
+    for (int j=i+1; j < nProcesses; j++){
+      //cout << "I: " << i << " and J: " << j << "\n";
+      //cout << "Arrival Times: "<< procArr[i].art << "-------" << procArr[j].art << "\n";
+      if (procArr[i].art > procArr[j].art){
+	aux = procArr[i];
+	//cout << "Aux Variable: " << aux.pid << "\n";
+	procArr[i] = procArr[j];
+	procArr[j] = aux;
+      }
+    }
+  }
+
+  int complete = 0;
+  for (int time = 0; complete != nProcesses; time++){
+    if((procArr[complete].bt + total_wt) == time){
+      procArr[complete].wt = total_wt;
+      procArr[complete].tat = total_wt + procArr[complete].bt;
+      total_wt = total_wt + procArr[complete].bt;
+      complete++;
+    }
+  }
+  
+  printAll(procArr, nProcesses);
+  
 }
 
 void menuProcesos(){
@@ -60,6 +124,7 @@ void menuProcesos(){
     cin >> answer; // User answer after asking for options
     
     if (answer ==  1){
+      firstCFS();
     } else if (answer == 2){
       sJF();
     } else if (answer == 3){
