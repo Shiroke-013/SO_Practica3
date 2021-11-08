@@ -5,10 +5,9 @@
 El objetivo de esta práctica es escribir un programa en C++ para simular los algoritmos que usa el sistema operativo para manejar los procesos, memoria (remplazo de páginas), y planificación del disco. Debido al cambio de fecha se puede seleccionar dos de las tres opciones anteriormente mencionadas.
 
 ### Especificaciones:
-1 - Ofrezca un menú claro para seleccionar entre los diferentes tipos de algoritmos.
-2 - Ofrezca un submenú para seleccionar entre los diferentes algoritmos que pertenecen a cada categoría:
-
-Procesos: FCFS, SJF(Shortest Job First Scheduling), Priority (Non preemptive, el usuario define las prioridades), Round Robin (RR, el usuario puede entrar el quamtum). El programa debe solicitar el número de procesos (máximo10), solicitar la información para cada proceso (burst time, arrival time) y debe poder seleccionar si desea correr todos los algoritmos o uno en particular.
+1. Ofrezca un menú claro para seleccionar entre los diferentes tipos de algoritmos.
+2. Ofrezca un submenú para seleccionar entre los diferentes algoritmos que pertenecen a cada categoría:
+- Procesos: FCFS, SJF(Shortest Job First Scheduling), Priority (Non preemptive, el usuario define las prioridades), Round Robin (RR, el usuario puede entrar el quamtum). El programa debe solicitar el número de procesos (máximo10), solicitar la información para cada proceso (burst time, arrival time) y debe poder seleccionar si desea correr todos los algoritmos o uno en particular.
 
  Y como resultado debe imprimir de una manera clara la siguiente información:
 
