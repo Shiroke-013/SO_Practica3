@@ -24,7 +24,7 @@ El objetivo de esta práctica es escribir un programa en C++ para simular los al
 ### First Come First Serve (FCFS)
 Este algortimo se ejecuta de la siguiente manera, el trabajo que llegó primero a la cola lista se asigna a la CPU y luego el trabajo que llegó en segundo lugar y así sucesivamente. Podemos decir que la cola lista actúa como una cola FIFO (primero en entrar, primero en salir), por lo que los trabajos / procesos que llegan se colocan al final de la cola. Este algoritmo está implementado de una manera *"Non-Preemptive"* lo que significa que cuando un proceso obtiene la CPU este no la libera hasta terminar.
 
-1. Para la implementación de este algoritmo se utiliza una estructura (objeto) que simula los componentes de un proceso y se tiene en cuenta el tiempo de llegada y el tiempo de ejecución, los cuales son escogidos por el usuario a la hora de ejecutar el algoritmo.
+1. Para la implementación de este algoritmo se utiliza una estructura (objeto) llamada *"Process"* que simula los componentes de un proceso y se tiene en cuenta el tiempo de llegada y el tiempo de ejecución, los cuales son escogidos por el usuario a la hora de ejecutar el algoritmo. El número de procesos y los tiempos mencionados son escogidos por el usuario.
 2. Después de llenar la información de los procesos estos se organizan en un arreglo según su orden de llegada.
 3. Como consecuente se simula el paso del tiempo con un *"for()"* y se va calculando el tiempo que espera cada proceso para ser empezado a ejecutar y el tiempo que se demora en ejecutarse completamente.
 4. Finalmente se imprime la información de cada proceso y se hace el calculo del tiempo de espera promedio y del tiempo que se demoran en ejecutarse los procesos.
@@ -40,6 +40,12 @@ La programación de prioridades puede ser cualquiera de las siguientes:
 
    - *"Preemptive"* (Preventivo): este tipo de programación puede adelantarse a la unidad central de procesamiento (CPU) en el caso de que la prioridad del proceso recién llegado sea mayor que la de los procesos existentes.
    - *"Non-Preemptive"* (No preventivo): este tipo de algoritmo de programación simplemente coloca el nuevo proceso en la parte superior de la cola lista.
+
+1. Como se aclaró en las especificaciones este algoritmo está implementado de manera *"Non-Preemptive"* por lo cual es bastante parecido a FCFS, se utiliza la estructura de *"Process"* y se le pide al usuario que escoja el tiempo de llegada, el tiempo de ejecución y la prioridad de cada proceso.
+2. Después, estos procesos se organizan de acuerdo a su prioridad en un arreglo siendo la prioridad más cercana a 0 la que se atiende primero.
+3. Como consecuente se simula el paso del tiempo con un *"for()"* y se va calculando el tiempo que espera cada proceso para ser empezado a ejecutar y el tiempo que se demora en ejecutarse completamente.
+4. Finalmente se imprime la información de cada proceso y se hace el calculo del tiempo de espera promedio y del tiempo que se demoran en ejecutarse los procesos.
+
 
 ### Round Robin (RR)
 
