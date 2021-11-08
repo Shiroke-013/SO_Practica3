@@ -24,9 +24,27 @@ El objetivo de esta práctica es escribir un programa en C++ para simular los al
 ### First Come First Serve (FCFS)
 Este algortimo se ejecuta de la siguiente manera, el trabajo que llegó primero a la cola lista se asigna a la CPU y luego el trabajo que llegó en segundo lugar y así sucesivamente. Podemos decir que la cola lista actúa como una cola FIFO (primero en entrar, primero en salir), por lo que los trabajos / procesos que llegan se colocan al final de la cola. Este algoritmo está implementado de una manera *"Non-Preemptive"* lo que significa que cuando un proceso obtiene la CPU este no la libera hasta terminar.
 
-- Para la implementación de este algoritmo se utiliza una estructura (objeto) que simula los componentes de un proceso y se tiene en cuenta el tiempo de llegada y el tiempo de ejecución, los cuales son escogidos por el usuario a la hora de ejecutar el algoritmo.
-- Después de llenar la información de los procesos estos se organizan en un arreglo según su orden de llegada.
-- Como consecuente se simula el paso del tiempo con un *"for()"* y se va calculando el tiempo que espera cada proceso para ser empezado a ejecutar y el tiempo que se demora en ejecutarse completamente.
-- Finalmente se imprime la información de cada proceso y se hace el calculo del tiempo de espera promedio y del tiempo que se demoran en ejecutarse los procesos.
+1. Para la implementación de este algoritmo se utiliza una estructura (objeto) que simula los componentes de un proceso y se tiene en cuenta el tiempo de llegada y el tiempo de ejecución, los cuales son escogidos por el usuario a la hora de ejecutar el algoritmo.
+2. Después de llenar la información de los procesos estos se organizan en un arreglo según su orden de llegada.
+3. Como consecuente se simula el paso del tiempo con un *"for()"* y se va calculando el tiempo que espera cada proceso para ser empezado a ejecutar y el tiempo que se demora en ejecutarse completamente.
+4. Finalmente se imprime la información de cada proceso y se hace el calculo del tiempo de espera promedio y del tiempo que se demoran en ejecutarse los procesos.
 
-### Shortest Job First Serve (SJFS)
+### Shortest Job First (SJF)
+
+### Priority
+La programación de prioridades es un método de programación de procesos en función de la prioridad. En este método, el programador elige las tareas para trabajar según la prioridad, que es diferente de otros tipos de programación, por ejemplo, un simple round robin.
+
+La programación de prioridades implica la asignación de prioridades a cada proceso, y los procesos con prioridades más altas se llevan a cabo primero, mientras que las tareas con prioridades iguales se llevan a cabo por orden de llegada (FCFS) o por turnos (RR).
+
+La programación de prioridades puede ser cualquiera de las siguientes:
+
+   - *"Preemptive"* (Preventivo): este tipo de programación puede adelantarse a la unidad central de procesamiento (CPU) en el caso de que la prioridad del proceso recién llegado sea mayor que la de los procesos existentes.
+   - *"Non-Preemptive"* (No preventivo): este tipo de algoritmo de programación simplemente coloca el nuevo proceso en la parte superior de la cola lista.
+
+### Round Robin (RR)
+
+
+## Referencias
+- https://www.techopedia.com/definition/23455/first-come-first-served-fcfs
+- https://www.techopedia.com/definition/21478/priority-scheduling
+- 
