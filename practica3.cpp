@@ -257,10 +257,12 @@ int main(){
     } else if (at == 2){
       cout << "En proceso... \n";
     } else if (at == 3){
-      cout << "Lo lamentamos esta opción no está disponible \n";
+      at = 0;
+      cout << "Lo lamentamos esta opción no está disponible \n\n\n";
     } else if (at == 4){
       exit(0);
     } else {
+      at = 0;
       cout << "Seleccione una opción válida. >:/ \n";
     }
   }
