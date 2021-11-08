@@ -9,7 +9,7 @@ struct Process {
   int art;      // Arrival Time
   int wt;       // Waiting Time
   int tat;      // Turnaround Time
-  int pri = 0;      // Priority
+  int pri = 0;  // Priority
 };
 
 
