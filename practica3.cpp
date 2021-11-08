@@ -2,22 +2,27 @@
 
 using namespace std;
 
-// Structure for every process
+//Structure for every process.
 struct Process {
   int pid;      // Process ID
   int bt;       // Burst Time
-  int art = 0;  // Arrival Time
-  int wt;
-  int tat;
+  int art;  // Arrival Time
+  int wt;       // Waiting Time
+  int tat;      // Turnaround Time
 };
 
-void printAll(Process procArr[], int nProcesses){
+
+//Prints the information of each process.
+void printAll(Process procArr[], int nProcesses, int avgWT, int avgTaT){
   cout << "Processes " << "   Burst time " << "   Arrival time" << "   Waiting time " << "   Turn around time\n";
   for (int i = 1; i <= nProcesses; i++){
     cout << procArr[i-1].pid << "\t\t" << procArr[i-1].bt << "\t\t" << procArr[i-1].art << "\t\t" << procArr[i-1].wt << "\t\t" << procArr[i-1].tat << "\n";
   }
+  cout << "Average Waiting time: " << avgWT/nProcesses << "\n";
+  cout << "Average Turnaround time: " << avgTaT/nProcesses << "\n";
 }
 
+//Gets the number of Processes that are going to be created.
 int getNumberOfProcesses(){
   int nProcesses = -1;
   while (nProcesses < 0 || nProcesses > 10){
@@ -27,6 +32,7 @@ int getNumberOfProcesses(){
   return nProcesses;
 }
 
+//Gets the information of each process.
 void processesStruc(Process procArr[], int np){
 
     cout << "La estructura de cada proceso es la siguiente: \n";
@@ -44,23 +50,18 @@ void processesStruc(Process procArr[], int np){
       procArr[i-1].bt =  burstT;
       procArr[i-1].art = arrivalT;
     }
+
+    cout << "\n\n";
 }
 
-/*void waitingTimeSFJ(Process procArr[], int np, int wt[]){
-  int runningT = 0;
-  int completeP = 0;
-  for (int time = 0; completeP != np; time++){
-    
-  }
-  
-}*/
-
+//Executes Shortest Job First Serve Algorithm.
 void sJF(){
   
   int nProcesses = getNumberOfProcesses();
-  
   Process procArr[nProcesses];
   processesStruc(procArr, nProcesses);
+
+  cout << "SJFS running.... \n";
 
   int wt[nProcesses], tat[nProcesses], total_wt = 0, total_tat = 0;
 
@@ -73,30 +74,30 @@ void sJF(){
     }
 }
 
+//Executes First Come First Serve Algorithm.
 void firstCFS(){
 
-  int nProcesses = getNumberOfProcesses();
+  /*int nProcesses = getNumberOfProcesses();
   Process procArr[nProcesses];
-  processesStruc(procArr, nProcesses);
+  processesStruc(procArr, nProcesses);*/
 
   cout << "FCFS running.... \n";
 
-  int wt[nProcesses], tat[nProcesses], total_wt = 0, total_tat = 0;
-  
+  int total_wt = 0, total_tat = 0;
+
+  //Organices the array in the order of process arrival
   Process aux;
   for (int i=0; i < nProcesses; i++){
     for (int j=i+1; j < nProcesses; j++){
-      //cout << "I: " << i << " and J: " << j << "\n";
-      //cout << "Arrival Times: "<< procArr[i].art << "-------" << procArr[j].art << "\n";
       if (procArr[i].art > procArr[j].art){
 	aux = procArr[i];
-	//cout << "Aux Variable: " << aux.pid << "\n";
 	procArr[i] = procArr[j];
 	procArr[j] = aux;
       }
     }
   }
 
+  //Calculates Waiting Time and Turnaround Time of every Process
   int complete = 0;
   for (int time = 0; complete != nProcesses; time++){
     if((procArr[complete].bt + total_wt) == time){
@@ -106,9 +107,19 @@ void firstCFS(){
       complete++;
     }
   }
+
+  //Calculates Total Waiting Time and Total Turnaround Time
+  float avgWT = 0, avgTaT = 0; 
+  for(int i = 0; i < nProcesses; i++){
+    avgWT = avgWT + procArr[i].wt;
+    avgTaT = avgTaT + procArr[i].tat;
+  }
+
+  printAll(procArr, nProcesses, avgWT, avgTaT);
   
-  printAll(procArr, nProcesses);
-  
+}
+
+void prioority(){
 }
 
 void menuProcesos(){
@@ -128,6 +139,7 @@ void menuProcesos(){
     } else if (answer == 2){
       sJF();
     } else if (answer == 3){
+      priority();
     } else if (answer == 4){
     } else if (answer == 5){
     } else {
@@ -137,23 +149,28 @@ void menuProcesos(){
   }
 }
 
-//int * menuMemoria(){}
-
 int main(){
 
-  int at;
-  cout << "¿Qué tipo de algoritmo quieres usar? Digita el número de la opción:\n";
-  cout << "1 - Algoritmos de Procesos\n";
-  cout << "2 - Algortimos de Memoria\n";
-  cout << "3 - Algoritmos de Planificación de Disco\n";
-  cin >> at; // at: Algorithm Type
+  int at = 0;
+  while (at == 0){
+    cout << "¿Qué tipo de algoritmo quieres usar? Digita el número de la opción:\n";
+    cout << "1 - Algoritmos de Procesos\n";
+    cout << "2 - Algortimos de Memoria\n";
+    cout << "3 - Algoritmos de Planificación de Disco\n";
+    cout << "4 - Salir del programa\n";
+    cin >> at; // at: Algorithm Type
 
-  if (at ==  1){
-    menuProcesos();
-  } else if (at == 2){
-    cout << "En proceso... \n";
-  } else {
-    cout << "Lo lamentamos, esta opción no está disponible. :( \n";
+    if (at ==  1){
+      menuProcesos();
+    } else if (at == 2){
+      cout << "En proceso... \n";
+    } else if (at == 3){
+      cout << "Lo lamentamos esta opción no está disponible \n";
+    } else if (at == 4){
+      exit(0);
+    } else {
+      cout << "Seleccione una opción válida. >:/ \n";
+    }
   }
 
   return 0;
