@@ -19,7 +19,7 @@ El objetivo de esta práctica es escribir un programa en C++ para simular los al
      - La cadena con los movimientos realizados
      - La cantidad de movimientos realizados
 
-## Algoritmos de Procesos
+## Algoritmos de Programación de Procesos
 
 ### First Come First Serve (FCFS)
 Este algortimo se ejecuta de la siguiente manera, el trabajo que llegó primero a la cola lista se asigna a la CPU y luego el trabajo que llegó en segundo lugar y así sucesivamente. Podemos decir que la cola lista actúa como una cola FIFO (primero en entrar, primero en salir), por lo que los trabajos / procesos que llegan se colocan al final de la cola. Este algoritmo está implementado de una manera *"Non-Preemptive"* lo que significa que cuando un proceso obtiene la CPU este no la libera hasta terminar.
@@ -30,6 +30,10 @@ Este algortimo se ejecuta de la siguiente manera, el trabajo que llegó primero 
 4. Finalmente se imprime la información de cada proceso y se hace el calculo del tiempo de espera promedio y del tiempo que se demoran en ejecutarse los procesos.
 
 ### Shortest Job First (SJF)
+El trabajo más corto primero es un algoritmo de programación en el que se selecciona el proceso con el menor tiempo de ejecución para su ejecución a continuación. El trabajo más corto primero puede ser *"Preemptive"* o *"Non-Preemptive"*. Debido a su naturaleza simple, el trabajo más corto primero se considera óptimo. También reduce el tiempo medio de espera de otros procesos en espera de ejecución.
+
+Este algoritmo también es conocido como *"Shortest Job Next"* (SJN) y *"Shortest Process Next"* (SPN).
+
 
 ### Priority
 La programación de prioridades es un método de programación de procesos en función de la prioridad. En este método, el programador elige las tareas para trabajar según la prioridad, que es diferente de otros tipos de programación, por ejemplo, un simple round robin.
@@ -48,9 +52,12 @@ La programación de prioridades puede ser cualquiera de las siguientes:
 
 
 ### Round Robin (RR)
+Round Robin (RR) es un algoritmo de programación de trabajos que se considera muy justo, ya que utiliza intervalos de tiempo que se asignan a cada proceso en la cola o línea. Luego, a cada proceso se le permite usar la CPU durante un período de tiempo determinado, y si no termina dentro del tiempo asignado, se reemplaza y luego se mueve al final de la línea para que el siguiente proceso en línea pueda usar la CPU durante la misma cantidad de tiempo.
+
 
 
 ## Referencias
 - https://www.techopedia.com/definition/23455/first-come-first-served-fcfs
+- https://www.techopedia.com/definition/22053/shortest-job-first-sjf
 - https://www.techopedia.com/definition/21478/priority-scheduling
-- 
+- https://www.techopedia.com/definition/9236/round-robin-scheduling-rrs
