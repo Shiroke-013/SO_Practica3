@@ -9,15 +9,15 @@ struct Process {
   int art;      // Arrival Time
   int wt;       // Waiting Time
   int tat;      // Turnaround Time
-  int pri;      // Priority
+  int pri = 0;      // Priority
 };
 
 
 //Prints the information of each process.
 void printAll(Process procArr[], int nProcesses, float avgWT, float avgTaT){
-  cout << "Processes " << "   Burst time " << "   Arrival time" << "   Waiting time " << "   Turn around time\n";
+  cout << "Processes " << "   Burst time " << "   Arrival time" << "   Priority" << "   Waiting time " << "   Turn around time\n";
   for (int i = 1; i <= nProcesses; i++){
-    cout << procArr[i-1].pid << "\t\t" << procArr[i-1].bt << "\t\t" << procArr[i-1].art << "\t\t" << procArr[i-1].wt << "\t\t" << procArr[i-1].tat << "\n";
+    cout << procArr[i-1].pid << "\t\t" << procArr[i-1].bt << "\t\t" << procArr[i-1].art << "\t\t" << procArr[i-1].pri << "\t\t" << procArr[i-1].wt << "\t\t" << procArr[i-1].tat << "\n";
   }
   cout << "Average Waiting time: " << avgWT/nProcesses << "\n";
   cout << "Average Turnaround time: " << avgTaT/nProcesses << "\n";
@@ -58,17 +58,51 @@ void processesStruc(Process procArr[], int np){
 //Executes Shortest Job First Serve Algorithm.
 void sJF(Process procArr[], int nProcesses){
   
-  cout << "SJFS running.... \n";
+  cout << "SJF running.... \n";
 
-  int wt[nProcesses], tat[nProcesses], total_wt = 0, total_tat = 0;
-
-  //waitingTimeSJF(procArr, nProcesses, wt);
-  
-  for (int i = 1; i <= nProcesses; i++){
-      cout << procArr[i-1].pid << "\n";
-      cout << procArr[i-1].bt << "\n";
-      cout << procArr[i-1].art << "\n";
+  //Organices the array in the order of process arrival
+  Process aux;
+  for (int i=0; i < nProcesses; i++){
+    for (int j=i+1; j < nProcesses; j++){
+      if (procArr[i].art >= procArr[j].art && procArr[i].bt > procArr[j].bt){
+	aux = procArr[i];
+	procArr[i] = procArr[j];
+	procArr[j] = aux;
+      }
     }
+  }
+  
+  int total_wt = 0, total_tat = 0;
+  //Calculates Waiting Time and Turnaround Time of every Process
+  int complete = 0;
+  for (int time = 0; complete != nProcesses; time++){
+    if((procArr[complete].bt + total_wt) == time){
+      procArr[complete].wt = total_wt;
+      procArr[complete].tat = total_wt + procArr[complete].bt;
+      total_wt = total_wt + procArr[complete].bt;
+      complete++;
+      // When a process is complete, this loops check if another process arrives with smallest burst time.
+      for (int i = complete; i < nProcesses; i++){
+	for (int j = i+1; j < nProcesses; j++){
+	  if (procArr[i].bt > procArr[j].bt && procArr[j].art <= time){
+	    aux = procArr[i];
+	    procArr[i] = procArr[j];
+	    procArr[j] = aux;
+	  }
+	}
+      }
+    }
+  }
+
+  //Calculates Total Waiting Time and Total Turnaround Time
+  float avgWT = 0, avgTaT = 0; 
+  for(int i = 0; i < nProcesses; i++){
+    avgWT = avgWT + procArr[i].wt;
+    avgTaT = avgTaT + procArr[i].tat;
+  }
+  
+  printAll(procArr, nProcesses, avgWT, avgTaT);
+  
 }
 
 //Executes First Come First Serve Algorithm.
@@ -130,11 +164,11 @@ void priority(Process procArr[], int nProcesses){
 
   int total_wt = 0, total_tat = 0;
 
-  //Organices the array in priority
+  //Organices the array in the order of process arrival
   Process aux;
   for (int i=0; i < nProcesses; i++){
     for (int j=i+1; j < nProcesses; j++){
-      if (procArr[i].pri > procArr[j].pri){
+      if (procArr[i].art >= procArr[j].art && procArr[i].pri > procArr[j].pri){
 	aux = procArr[i];
 	procArr[i] = procArr[j];
 	procArr[j] = aux;
@@ -150,6 +184,16 @@ void priority(Process procArr[], int nProcesses){
       procArr[complete].tat = total_wt + procArr[complete].bt;
       total_wt = total_wt + procArr[complete].bt;
       complete++;
+      // When a process is complete, this loops check if another process arrives with higher priority arrives in the correct time.
+      for (int i = complete; i < nProcesses; i++){
+	for (int j = i+1; j < nProcesses; j++){
+	  if (procArr[i].pri > procArr[j].pri && procArr[j].art <= time){
+	    aux = procArr[i];
+	    procArr[i] = procArr[j];
+	    procArr[j] = aux;
+	  }
+	}
+      }
     }
   }
 
