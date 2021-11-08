@@ -6,14 +6,15 @@ using namespace std;
 struct Process {
   int pid;      // Process ID
   int bt;       // Burst Time
-  int art;  // Arrival Time
+  int art;      // Arrival Time
   int wt;       // Waiting Time
   int tat;      // Turnaround Time
+  int pri;      // Priority
 };
 
 
 //Prints the information of each process.
-void printAll(Process procArr[], int nProcesses, int avgWT, int avgTaT){
+void printAll(Process procArr[], int nProcesses, float avgWT, float avgTaT){
   cout << "Processes " << "   Burst time " << "   Arrival time" << "   Waiting time " << "   Turn around time\n";
   for (int i = 1; i <= nProcesses; i++){
     cout << procArr[i-1].pid << "\t\t" << procArr[i-1].bt << "\t\t" << procArr[i-1].art << "\t\t" << procArr[i-1].wt << "\t\t" << procArr[i-1].tat << "\n";
@@ -55,12 +56,8 @@ void processesStruc(Process procArr[], int np){
 }
 
 //Executes Shortest Job First Serve Algorithm.
-void sJF(){
+void sJF(Process procArr[], int nProcesses){
   
-  int nProcesses = getNumberOfProcesses();
-  Process procArr[nProcesses];
-  processesStruc(procArr, nProcesses);
-
   cout << "SJFS running.... \n";
 
   int wt[nProcesses], tat[nProcesses], total_wt = 0, total_tat = 0;
@@ -75,11 +72,7 @@ void sJF(){
 }
 
 //Executes First Come First Serve Algorithm.
-void firstCFS(){
-
-  /*int nProcesses = getNumberOfProcesses();
-  Process procArr[nProcesses];
-  processesStruc(procArr, nProcesses);*/
+void firstCFS(Process procArr[], int nProcesses){
 
   cout << "FCFS running.... \n";
 
@@ -119,10 +112,58 @@ void firstCFS(){
   
 }
 
-void prioority(){
+void priority(Process procArr[], int nProcesses){
+  
+  cout << "Priority running.... \n";
+  int priority = 0;
+  cout << "A continuación ingresarás la prioridad de cada proceso, recuerda que esta entre más cerca esté del 0 más prioridad tendrá \n";
+  for (int i = 0; i < nProcesses; i++){
+    cout << "Ingresa la prioridad del proceso " << i+1 << ": ";
+    cin >> priority;
+    if(priority < 0 || priority > 139){
+      cout << "Por favor ingresa un valor que se encuentre entre 0-139\n";
+      i--;
+    } else {
+      procArr[i].pri = priority;
+    }
+  }
+
+  int total_wt = 0, total_tat = 0;
+
+  //Organices the array in priority
+  Process aux;
+  for (int i=0; i < nProcesses; i++){
+    for (int j=i+1; j < nProcesses; j++){
+      if (procArr[i].pri > procArr[j].pri){
+	aux = procArr[i];
+	procArr[i] = procArr[j];
+	procArr[j] = aux;
+      }
+    }
+  }
+
+  //Calculates Waiting Time and Turnaround Time of every Process
+  int complete = 0;
+  for (int time = 0; complete != nProcesses; time++){
+    if((procArr[complete].bt + total_wt) == time){
+      procArr[complete].wt = total_wt;
+      procArr[complete].tat = total_wt + procArr[complete].bt;
+      total_wt = total_wt + procArr[complete].bt;
+      complete++;
+    }
+  }
+
+  //Calculates Total Waiting Time and Total Turnaround Time
+  float avgWT = 0, avgTaT = 0; 
+  for(int i = 0; i < nProcesses; i++){
+    avgWT = avgWT + procArr[i].wt;
+    avgTaT = avgTaT + procArr[i].tat;
+  }
+
+  printAll(procArr, nProcesses, avgWT, avgTaT);
 }
 
-void menuProcesos(){
+void processMenu(){
   int answer = 0;
   while (answer == 0){
     
@@ -133,20 +174,27 @@ void menuProcesos(){
     cout << "4 - RR - Round Robin - Debes entrar el tiempo quamtum\n";
     cout << "5 - Todos los algoritmos en el orden establecido\n";
     cin >> answer; // User answer after asking for options
-    
-    if (answer ==  1){
-      firstCFS();
-    } else if (answer == 2){
-      sJF();
-    } else if (answer == 3){
-      priority();
-    } else if (answer == 4){
-    } else if (answer == 5){
+
+    if (answer == 1 || answer == 2 || answer == 3 || answer == 4 || answer == 5){
     } else {
       answer = 0;
       cout << "Seleccione una opción válida. >:/ \n";
     }
   }
+
+  int nProcesses = getNumberOfProcesses();
+  Process procArr[nProcesses];
+  processesStruc(procArr, nProcesses);
+    
+    if (answer ==  1){
+      firstCFS(procArr, nProcesses);
+    } else if (answer == 2){
+      sJF(procArr, nProcesses);
+    } else if (answer == 3){
+      priority(procArr, nProcesses);
+    } else if (answer == 4){
+    } else if (answer == 5){
+    } else {}
 }
 
 int main(){
@@ -161,7 +209,7 @@ int main(){
     cin >> at; // at: Algorithm Type
 
     if (at ==  1){
-      menuProcesos();
+      processMenu();
     } else if (at == 2){
       cout << "En proceso... \n";
     } else if (at == 3){
