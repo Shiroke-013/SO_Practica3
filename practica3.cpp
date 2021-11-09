@@ -162,8 +162,6 @@ void priority(Process procArr[], int nProcesses){
     }
   }
 
-  int total_wt = 0, total_tat = 0;
-
   //Organices the array in the order of process arrival
   Process aux;
   for (int i=0; i < nProcesses; i++){
@@ -176,8 +174,8 @@ void priority(Process procArr[], int nProcesses){
     }
   }
 
-  //Calculates Waiting Time and Turnaround Time of every Process
-  int complete = 0;
+  //Calculates Waiting Time and Turnaround Time OBof every Process
+  int total_wt = 0, total_tat = 0, complete = 0;
   for (int time = 0; complete != nProcesses; time++){
     if((procArr[complete].bt + total_wt) == time){
       procArr[complete].wt = total_wt;
@@ -207,6 +205,88 @@ void priority(Process procArr[], int nProcesses){
   printAll(procArr, nProcesses, avgWT, avgTaT);
 }
 
+void roundRobin(Process procArr[], int nProcesses){
+  
+  cout << "Round Robin running.... \n";
+  
+  int quantum = 0;
+  while(quantum == 0){
+    cout << "Ingresa por favor el tiempo quantum para este algoritmo: ";
+    cin >> quantum;
+    if(quantum <= 0){
+      cout << "Por favor ingresa un valor que sea mayor a 0";
+      quantum = 0;
+    }
+  }
+
+  //Organices the array in the order of process arrival
+  Process aux;
+  for (int i=0; i < nProcesses; i++){
+    for (int j=i+1; j < nProcesses; j++){
+      if (procArr[i].art > procArr[j].art){
+	aux = procArr[i];
+	procArr[i] = procArr[j];
+	procArr[j] = aux;
+      }
+    }
+  }
+
+  //Copies the burst time of each process into an array
+  int completeP[10] = {0};
+  int btp[nProcesses];
+  for (int i = 0; i < nProcesses; i++){
+    btp[i] = procArr[i].bt;
+  }
+  
+  int total_wt = 0, total_tat = 0, complete = 0, completeAux = 0, count = 0;
+  //Calculates Turnaround Time of every Process
+  for (int time = 0; complete != nProcesses; time++){
+    //cout << "Time: " << time << " and compleAux: " << completeAux << " and complete: " << complete << " and count: " << count << "\n";
+    //cout << "1: " << btp[0] << "  2: " << btp[1] << "  3: " << btp[2]<< "  4: " << btp[3]<< "  5: " << btp[4] << "\n";
+    //cout << "1: " << completeP[0] << "  2: " << completeP[1] << "  3: " << completeP[2]<< "  4: " << completeP[3]<< "  5: " << completeP[4] << "\n\n";
+    if (completeP[completeAux] == 1){
+      completeAux++;
+      time--;
+    } else {
+      if(btp[completeAux] <= quantum && completeP[completeAux] == 0){
+	completeP[completeAux] = 1;
+	time = time + (btp[completeAux]-1);
+	count = 0;
+	procArr[completeAux].tat = time;
+	btp[completeAux] = 0;
+	completeAux++;
+	complete++;
+      } else if(count == quantum){
+	count = 0;
+	procArr[completeAux].tat = time;
+	btp[completeAux] = btp[completeAux] - quantum;;
+	if (btp[completeAux] == 0){
+	  complete++;
+	}
+	completeAux++;
+      }
+      if(completeAux == nProcesses){
+	completeAux = 0;
+      }
+      count++;
+    }
+  }
+
+  // Calculates Waiting Time for each Process.
+  for(int i = 0; i < nProcesses; i++){
+    procArr[i].wt = procArr[i].tat - procArr[i].bt;
+  }
+  
+  //Calculates Total Waiting Time and Total Turnaround Time
+  float avgWT = 0, avgTaT = 0; 
+  for(int i = 0; i < nProcesses; i++){
+    avgWT = avgWT + procArr[i].wt;
+    avgTaT = avgTaT + procArr[i].tat;
+  }
+  printAll(procArr, nProcesses, avgWT, avgTaT);
+  
+}
+
 void processMenu(){
   int answer = 0;
   while (answer == 0){
@@ -215,14 +295,14 @@ void processMenu(){
     cout << "1 - FCFS - First Come First Serve \n";
     cout << "2 - SJF - Shortest Job First Scheduling \n";
     cout << "3 - Priority(Non preemptive) - Tu decides la prioridad de los procesos ;) \n";
-    cout << "4 - RR - Round Robin - Debes entrar el tiempo quamtum\n";
+    cout << "4 - RR - Round Robin - Tu decides el tiempo quamtum ;) \n";
     cout << "5 - Todos los algoritmos en el orden establecido\n";
     cin >> answer; // User answer after asking for options
 
     if (answer == 1 || answer == 2 || answer == 3 || answer == 4 || answer == 5){
     } else {
       answer = 0;
-      cout << "Seleccione una opción válida. >:/ \n";
+      cout << "Seleccione una opción válida. >:/ \n\n";
     }
   }
 
@@ -237,7 +317,13 @@ void processMenu(){
     } else if (answer == 3){
       priority(procArr, nProcesses);
     } else if (answer == 4){
+      roundRobin(procArr, nProcesses);
     } else if (answer == 5){
+      firstCFS(procArr, nProcesses);
+      sJF(procArr, nProcesses);
+      priority(procArr, nProcesses);
+      //roundRobin(procArr, nProcesses);
+      cout << "Se han ejecutado todos los algoritmos XD...";
     } else {}
 }
 
