@@ -12,6 +12,19 @@ struct Process {
   int pri = 0;  // Priority
 };
 
+void standardSort(Process procArr[], int nProcesses){
+  //Organices the array in the order of process arrival
+  Process aux;
+  for (int i=0; i < nProcesses; i++){
+    for (int j=i+1; j < nProcesses; j++){
+      if (procArr[i].art > procArr[j].art){
+	aux = procArr[i];
+	procArr[i] = procArr[j];
+	procArr[j] = aux;
+      }
+    }
+  }
+}
 
 //Prints the information of each process.
 void printAll(Process procArr[], int nProcesses, float avgWT, float avgTaT){
@@ -57,17 +70,22 @@ void processesStruc(Process procArr[], int np){
 
 //Executes Shortest Job First Serve Algorithm.
 void sJF(Process procArr[], int nProcesses){
-  
-  cout << "SJF running.... \n";
 
-  //Organices the array in the order of process arrival
+  Process procArrAux[nProcesses];
+  for (int i = 0; i < nProcesses; i++){
+    procArrAux[i] = procArr[i];
+  }
+  
+  cout << " \n\n SJF running.... \n";
+
+  //Organices the array in the order of process arrival and burst time
   Process aux;
   for (int i=0; i < nProcesses; i++){
     for (int j=i+1; j < nProcesses; j++){
-      if (procArr[i].art >= procArr[j].art && procArr[i].bt > procArr[j].bt){
-	aux = procArr[i];
-	procArr[i] = procArr[j];
-	procArr[j] = aux;
+      if (procArrAux[i].art >= procArrAux[j].art && procArrAux[i].bt > procArrAux[j].bt){
+	aux = procArrAux[i];
+	procArrAux[i] = procArrAux[j];
+	procArrAux[j] = aux;
       }
     }
   }
@@ -76,18 +94,18 @@ void sJF(Process procArr[], int nProcesses){
   //Calculates Waiting Time and Turnaround Time of every Process
   int complete = 0;
   for (int time = 0; complete != nProcesses; time++){
-    if((procArr[complete].bt + total_wt) == time){
-      procArr[complete].wt = total_wt;
-      procArr[complete].tat = total_wt + procArr[complete].bt;
-      total_wt = total_wt + procArr[complete].bt;
+    if((procArrAux[complete].bt + total_wt) == time){
+      procArrAux[complete].wt = total_wt;
+      procArrAux[complete].tat = total_wt + procArrAux[complete].bt;
+      total_wt = total_wt + procArrAux[complete].bt;
       complete++;
       // When a process is complete, this loops check if another process arrives with smallest burst time.
       for (int i = complete; i < nProcesses; i++){
 	for (int j = i+1; j < nProcesses; j++){
-	  if (procArr[i].bt > procArr[j].bt && procArr[j].art <= time){
-	    aux = procArr[i];
-	    procArr[i] = procArr[j];
-	    procArr[j] = aux;
+	  if (procArrAux[i].bt > procArrAux[j].bt && procArrAux[j].art <= time){
+	    aux = procArrAux[i];
+	    procArrAux[i] = procArrAux[j];
+	    procArrAux[j] = aux;
 	  }
 	}
       }
@@ -97,32 +115,22 @@ void sJF(Process procArr[], int nProcesses){
   //Calculates Total Waiting Time and Total Turnaround Time
   float avgWT = 0, avgTaT = 0; 
   for(int i = 0; i < nProcesses; i++){
-    avgWT = avgWT + procArr[i].wt;
-    avgTaT = avgTaT + procArr[i].tat;
+    avgWT = avgWT + procArrAux[i].wt;
+    avgTaT = avgTaT + procArrAux[i].tat;
   }
   
-  printAll(procArr, nProcesses, avgWT, avgTaT);
+  printAll(procArrAux, nProcesses, avgWT, avgTaT);
   
 }
 
 //Executes First Come First Serve Algorithm.
 void firstCFS(Process procArr[], int nProcesses){
 
-  cout << "FCFS running.... \n";
+  cout << "\n\n FCFS running.... \n";
 
   int total_wt = 0, total_tat = 0;
 
-  //Organices the array in the order of process arrival
-  Process aux;
-  for (int i=0; i < nProcesses; i++){
-    for (int j=i+1; j < nProcesses; j++){
-      if (procArr[i].art > procArr[j].art){
-	aux = procArr[i];
-	procArr[i] = procArr[j];
-	procArr[j] = aux;
-      }
-    }
-  }
+  standardSort(procArr, nProcesses);
 
   //Calculates Waiting Time and Turnaround Time of every Process
   int complete = 0;
@@ -147,8 +155,13 @@ void firstCFS(Process procArr[], int nProcesses){
 }
 
 void priority(Process procArr[], int nProcesses){
+
+  Process procArrAux[nProcesses];
+  for (int i = 0; i < nProcesses; i++){
+    procArrAux[i] = procArr[i];
+  }
   
-  cout << "Priority running.... \n";
+  cout << "\n\n Priority running.... \n";
   int priority = 0;
   cout << "A continuación ingresarás la prioridad de cada proceso, recuerda que esta entre más cerca esté del 0 más prioridad tendrá \n";
   for (int i = 0; i < nProcesses; i++){
@@ -158,7 +171,7 @@ void priority(Process procArr[], int nProcesses){
       cout << "Por favor ingresa un valor que se encuentre entre 0-139\n";
       i--;
     } else {
-      procArr[i].pri = priority;
+      procArrAux[i].pri = priority;
     }
   }
 
@@ -166,10 +179,10 @@ void priority(Process procArr[], int nProcesses){
   Process aux;
   for (int i=0; i < nProcesses; i++){
     for (int j=i+1; j < nProcesses; j++){
-      if (procArr[i].art >= procArr[j].art && procArr[i].pri > procArr[j].pri){
-	aux = procArr[i];
-	procArr[i] = procArr[j];
-	procArr[j] = aux;
+      if (procArrAux[i].art >= procArrAux[j].art && procArrAux[i].pri > procArrAux[j].pri){
+	aux = procArrAux[i];
+	procArrAux[i] = procArrAux[j];
+	procArrAux[j] = aux;
       }
     }
   }
@@ -177,18 +190,18 @@ void priority(Process procArr[], int nProcesses){
   //Calculates Waiting Time and Turnaround Time OBof every Process
   int total_wt = 0, total_tat = 0, complete = 0;
   for (int time = 0; complete != nProcesses; time++){
-    if((procArr[complete].bt + total_wt) == time){
-      procArr[complete].wt = total_wt;
-      procArr[complete].tat = total_wt + procArr[complete].bt;
-      total_wt = total_wt + procArr[complete].bt;
+    if((procArrAux[complete].bt + total_wt) == time){
+      procArrAux[complete].wt = total_wt;
+      procArrAux[complete].tat = total_wt + procArrAux[complete].bt;
+      total_wt = total_wt + procArrAux[complete].bt;
       complete++;
       // When a process is complete, this loops check if another process arrives with higher priority arrives in the correct time.
       for (int i = complete; i < nProcesses; i++){
 	for (int j = i+1; j < nProcesses; j++){
-	  if (procArr[i].pri > procArr[j].pri && procArr[j].art <= time){
-	    aux = procArr[i];
-	    procArr[i] = procArr[j];
-	    procArr[j] = aux;
+	  if (procArrAux[i].pri > procArrAux[j].pri && procArrAux[j].art <= time){
+	    aux = procArrAux[i];
+	    procArrAux[i] = procArrAux[j];
+	    procArrAux[j] = aux;
 	  }
 	}
       }
@@ -198,16 +211,16 @@ void priority(Process procArr[], int nProcesses){
   //Calculates Total Waiting Time and Total Turnaround Time
   float avgWT = 0, avgTaT = 0; 
   for(int i = 0; i < nProcesses; i++){
-    avgWT = avgWT + procArr[i].wt;
-    avgTaT = avgTaT + procArr[i].tat;
+    avgWT = avgWT + procArrAux[i].wt;
+    avgTaT = avgTaT + procArrAux[i].tat;
   }
 
-  printAll(procArr, nProcesses, avgWT, avgTaT);
+  printAll(procArrAux, nProcesses, avgWT, avgTaT);
 }
 
 void roundRobin(Process procArr[], int nProcesses){
   
-  cout << "Round Robin running.... \n";
+  cout << "\n\n Round Robin running.... \n";
   
   int quantum = 0;
   while(quantum == 0){
@@ -219,17 +232,7 @@ void roundRobin(Process procArr[], int nProcesses){
     }
   }
 
-  //Organices the array in the order of process arrival
-  Process aux;
-  for (int i=0; i < nProcesses; i++){
-    for (int j=i+1; j < nProcesses; j++){
-      if (procArr[i].art > procArr[j].art){
-	aux = procArr[i];
-	procArr[i] = procArr[j];
-	procArr[j] = aux;
-      }
-    }
-  }
+  standardSort(procArr, nProcesses);
 
   //Copies the burst time of each process into an array
   int completeP[10] = {0};
@@ -241,37 +244,45 @@ void roundRobin(Process procArr[], int nProcesses){
   int total_wt = 0, total_tat = 0, complete = 0, completeAux = 0, count = 0;
   //Calculates Turnaround Time of every Process
   for (int time = 0; complete != nProcesses; time++){
-    //cout << "Time: " << time << " and compleAux: " << completeAux << " and complete: " << complete << " and count: " << count << "\n";
-    //cout << "1: " << btp[0] << "  2: " << btp[1] << "  3: " << btp[2]<< "  4: " << btp[3]<< "  5: " << btp[4] << "\n";
-    //cout << "1: " << completeP[0] << "  2: " << completeP[1] << "  3: " << completeP[2]<< "  4: " << completeP[3]<< "  5: " << completeP[4] << "\n\n";
     if (completeP[completeAux] == 1){
       completeAux++;
       time--;
     } else {
-      if(btp[completeAux] <= quantum && completeP[completeAux] == 0){
+
+      if (btp[completeAux] <= quantum && completeP[completeAux] == 0){
 	completeP[completeAux] = 1;
 	time = time + (btp[completeAux]-1);
-	count = 0;
 	procArr[completeAux].tat = time;
+	count = 0;
 	btp[completeAux] = 0;
 	completeAux++;
 	complete++;
+	/* We need to check every time the quantum time ends if the next processes already arrived*/
+	if (procArr[completeAux].art > time && completeAux < nProcesses){
+	  completeAux = completeAux - completeAux;
+	}
       } else if(count == quantum){
 	count = 0;
-	procArr[completeAux].tat = time;
+        procArr[completeAux].tat = time;
 	btp[completeAux] = btp[completeAux] - quantum;;
 	if (btp[completeAux] == 0){
 	  complete++;
 	}
 	completeAux++;
+	/* We need to check every time the quantum time ends if the next processes already arrived*/
+	if(procArr[completeAux].art > time && completeAux < nProcesses){
+	  completeAux = completeAux - completeAux;
+	}
       }
-      if(completeAux == nProcesses){
+      
+      /* If the completeAux equals the number of Precceses it means that we already are at the last position of the array and we need to startover*/
+      if (completeAux == nProcesses){
 	completeAux = 0;
       }
       count++;
     }
   }
-
+  
   // Calculates Waiting Time for each Process.
   for(int i = 0; i < nProcesses; i++){
     procArr[i].wt = procArr[i].tat - procArr[i].bt;
@@ -322,8 +333,8 @@ void processMenu(){
       firstCFS(procArr, nProcesses);
       sJF(procArr, nProcesses);
       priority(procArr, nProcesses);
-      //roundRobin(procArr, nProcesses);
-      cout << "Se han ejecutado todos los algoritmos XD...";
+      roundRobin(procArr, nProcesses);
+      cout << "Se han ejecutado todos los algoritmos XD... \n";
     } else {}
 }
 
