@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include "memory.h"
 
 using namespace std;
 
@@ -44,6 +45,32 @@ int getNumberOfProcesses(){
   cin >> nProcesses;
   }
   return nProcesses;
+}
+
+int getPageSize(){
+  
+  int pageSize = 0;
+  cout << "Por favor ingrese el tamaño de la pagina: ";
+  cin >> pageSize;
+  
+  return pageSize;
+}
+
+void fillPages(int pages[], int pageSize){
+  for (int i = 0; i<pageSize; i++)
+  {
+    cout << "Por favor ingrese el numero para la pagina:\n";
+    cin >> pages[i];
+  }
+}
+
+int getCapacity(){
+  
+  int capacity = 0;
+  cout << "Por favor ingrese la capacidad del frame: ";
+  cin >> capacity;
+  
+  return capacity;
 }
 
 //Gets the information of each process.
@@ -338,6 +365,47 @@ void processMenu(){
     } else {}
 }
 
+
+void memoryMenu(){
+  int answer = 0;
+  Memory memory = Memory();
+  while (answer == 0){
+    
+    cout << "¿Qué algoritmo de Memoria quieres ejecutar? Digita el número de la opción:\n";
+    cout << "1 - LRU - First Come First Serve \n";
+    cout << "2 - Optimal - Shortest Job First Scheduling \n";
+    cout << "3 - Todos los algoritmos en el orden establecido\n";
+    cin >> answer; // User answer after asking for options
+
+    if (answer == 1 || answer == 2 || answer == 3){
+    } else {
+      answer = 0;
+      cout << "Seleccione una opción válida. >:/ \n\n";
+    }
+
+    int pageSize = getPageSize();
+    int pages[pageSize];
+    int capacity = getCapacity();
+    fillPages(pages, pageSize);
+    
+    if (answer ==  1){
+      int lru = memory.LRU(pages, pageSize, capacity, 20);
+      cout << "LRU page defaults: " << lru << "\n";
+    } else if (answer == 2){
+      int opt = memory.Optimal(pages, pageSize, capacity);
+      cout << "Optimal page defaults: " << opt << "\n";
+    } else if (answer == 3){
+      int lru = memory.LRU(pages, pageSize, capacity, 20);
+      int opt = memory.Optimal(pages, pageSize, capacity);
+
+      cout << "LRU page defaults: " << lru << "\n";
+      cout << "Optimal page defaults: " << opt << "\n";
+      cout << "Se han ejecutado todos los algoritmos XD... \n";
+    }
+  }
+}
+
+
 int main(){
 
   int at = 0;
@@ -352,7 +420,7 @@ int main(){
     if (at ==  1){
       processMenu();
     } else if (at == 2){
-      cout << "En proceso... \n";
+      memoryMenu();
     } else if (at == 3){
       at = 0;
       cout << "Lo lamentamos esta opción no está disponible \n\n\n";
