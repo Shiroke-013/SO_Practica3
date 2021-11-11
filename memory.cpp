@@ -90,7 +90,6 @@ int Memory::Optimal(int pages[], int pageSize, int frameSize)
 {
     vector<int> frame;
     int page_faults = 0;
-    int hit = 0;
 
     for (int i = 0; i < pageSize; i++)
     {
@@ -110,4 +109,46 @@ int Memory::Optimal(int pages[], int pageSize, int frameSize)
     }
     
     return page_faults;
+}
+
+bool Memory::inFrame(int value, list<int> frame)
+{
+    bool status = false;
+    for(auto it = frame.begin(); it!= frame.end(); it++)
+    {
+        if (*it == value)
+        {
+            status = true;
+            break;
+        }
+    }
+
+    return status;
+}
+
+int Memory::FIFO(int pages[], int pageSize, int frameSize, int maxPageSize)
+{
+    list<int> frame;
+    int page_fault = 0;
+
+    if(pageSize <= maxPageSize)
+    {
+        for(int i = 0; i<pageSize; i++)
+        {
+            if(!inFrame(pages[i], frame))
+            {
+                if(frame.size()<frameSize)
+                {
+                    frame.push_back(pages[i]);
+                }
+                else {
+                    frame.pop_front();
+                    frame.push_back(pages[i]);
+                }
+                page_fault++;
+            }
+        }
+    }
+
+    return page_fault;
 }

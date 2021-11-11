@@ -372,12 +372,13 @@ void memoryMenu(){
   while (answer == 0){
     
     cout << "¿Qué algoritmo de Memoria quieres ejecutar? Digita el número de la opción:\n";
-    cout << "1 - LRU - First Come First Serve \n";
-    cout << "2 - Optimal - Shortest Job First Scheduling \n";
-    cout << "3 - Todos los algoritmos en el orden establecido\n";
+    cout << "1 - LRU - Least Recently Used algorithm \n";
+    cout << "2 - Optimal - Optimal algorithm \n";
+    cout << "3 - FIFO - FIrst In First Out algorithm \n";
+    cout << "4 - Todos los algoritmos en el orden establecido\n";
     cin >> answer; // User answer after asking for options
 
-    if (answer == 1 || answer == 2 || answer == 3){
+    if (answer == 1 || answer == 2 || answer == 3 || answer == 4){
     } else {
       answer = 0;
       cout << "Seleccione una opción válida. >:/ \n\n";
@@ -395,11 +396,16 @@ void memoryMenu(){
       int opt = memory.Optimal(pages, pageSize, capacity);
       cout << "Optimal page defaults: " << opt << "\n";
     } else if (answer == 3){
+      int fifo = memory.FIFO(pages, pageSize, capacity, 22);
+      cout << "FIFO page defaults: " << fifo << "\n";
+    } else if (answer == 4){
       int lru = memory.LRU(pages, pageSize, capacity, 20);
       int opt = memory.Optimal(pages, pageSize, capacity);
+      int fifo = memory.FIFO(pages, pageSize, capacity, 20);
 
       cout << "LRU page defaults: " << lru << "\n";
       cout << "Optimal page defaults: " << opt << "\n";
+      cout << "FIFO page defaults: " << fifo << "\n";
       cout << "Se han ejecutado todos los algoritmos XD... \n";
     }
   }
